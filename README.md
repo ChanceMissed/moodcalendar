@@ -61,3 +61,46 @@ src/main/resources
 ├── static/            # 정적 리소스
 ├── templates/         # HTML 템플릿 (JSP or Thymeleaf)
 └── application.yml
+
+```
+```
++-----------+         +-----------+        +-------------+
+|   User    |1       N|   Diary   |N      1|  Emotion    |
++-----------+---------+-----------+--------+-------------+
+| id (PK)   |         | id (PK)   |        | id (PK)     |
+| email     |         | user_id(FK)|       | user_id(FK, nullable) |
+| password  |         | emotion_id(FK)     | emoji       |
+| nickname  |         | content   |        | name        |
+| created_at|         | diary_date|        | color       |
++-----------+         | is_public |        | created_at  |
+| created_at|        +-------------+
+| updated_at|
++-----------+
+
++----------------+       +--------------+        +--------------+
+|   Reaction     |N     1|    Diary     |1      N|    User      |
++----------------+-------+--------------+--------+--------------+
+| id (PK)        |       | id (PK)      |        | id (PK)      |
+| diary_id (FK)  |       | ...          |        | ...          |
+| user_id (FK)   |       +--------------+        +--------------+
+| type           |  (좋아요, 공감 등)
+| created_at     |
++----------------+
+
++--------------+        +--------------+        +--------------+
+|   Comment    |N      1|    Diary     |1      N|    User      |
++--------------+--------+--------------+--------+--------------+
+| id (PK)      |        | id (PK)      |        | id (PK)      |
+| diary_id(FK) |        | ...          |        | ...          |
+| user_id(FK)  |        +--------------+        +--------------+
+| content      |
+| created_at   |
++--------------+
+
++--------------+        +--------------+
+|   Follow     |        |    User      |
++--------------+        +--------------+
+| follower_id  |--------| id (PK)      |
+| followee_id  |--------| id (PK)      |
++--------------+        +--------------+
+```

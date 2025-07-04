@@ -2,16 +2,20 @@ server:
   port: 8090
 
 spring:
+# H2 DB Connection
   datasource:
-    url: jdbc:h2:mem:mooddiary;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:mooddiary;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL
     driver-class-name: org.h2.Driver
     username: sa
     password:
-
   h2:
     console:
       enabled: true
-      
+  #schema sql init
+  sql:
+    init:
+      mode: always
+
   devtools:
     restart:
       enabled: true
