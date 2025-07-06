@@ -2,7 +2,13 @@ package com.example.moodcalendar.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
 public class Diary {
 
     private Long id;
@@ -11,11 +17,11 @@ public class Diary {
 
     private Long emotionId;
 
-    private String content;
+    private String content; // 본문 
 
-    private LocalDate diaryDate;
+    private LocalDate diaryDate; // 일기 날짜
 
-    private Boolean isPublic;
+    private Boolean isPublic; // 공개 여부
 
     private LocalDateTime createdAt;
 
