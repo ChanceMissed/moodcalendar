@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.moodcalendar.mapper.EmotionMapper">
+
+  <insert id="insertEmotion" parameterType="com.example.moodcalendar.domain.Emotion" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO emotion
+    (
+                          userId
+                          ,name
+                          ,emoji
+                          ,color
+                          ,created_at
+    ) VALUES
+    (
+                          #{userId}
+                          ,#{emoji}
+                          ,#{name}
+                          ,#{color}
+                          ,NOW()
+    )
+  </insert>
+
+  <update id="updateEmotion" parameterType="com.example.moodcalendar.domain.Emotion">
+    UPDATE emotion
+    <set>
+      <if test="name != null"> name = #{name}, </if>
+      <if test="emoji != null"> emoji = #{emoji}, </if>
+      <if test="color != null"> color = #{color}, </if>
+    </set>
+    WHERE id = #{id}
+  </update>
+
+  <!-- Delete -->
+  <delete id="deleteEmotionById" parameterType="long">
+    DELETE
+      FROM  emotion
+     WHERE  id = #{id}
+  </delete>
+
+  <!-- Select by Name -->
+  <select id="selectEmotionByName" resultType="com.example.moodcalendar.domain.Emotion">
+    SELECT *
+      FROM emotion
+     WHERE id = #{id}
+  </select>
+  <!-- Select by ID -->
+  <select id="selectEmotionById" resultType="com.example.moodcalendar.domain.Emotion">
+    SELECT  *
+      FROM  emotion
+      WHERE id = #{id}
+  </select>
+
+  <!-- Select All -->
+  <select id="selectAllEmotion" resultType="com.example.moodcalendar.domain.Emotion">
+    SELECT    *
+      FROM    emotion
+     ORDER BY id ASC
+  </select>
+
+</mapper>
