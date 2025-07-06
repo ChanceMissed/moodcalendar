@@ -3,7 +3,8 @@ CREATE TABLE users (
   email VARCHAR(255),
   password VARCHAR(255),
   nickname VARCHAR(255),
-  created_at TIMESTAMP
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
 );
 
 CREATE TABLE emotion (

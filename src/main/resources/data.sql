@@ -1,9 +1,9 @@
 -- 👤 사용자(User) 2명
-INSERT INTO users (email, password, nickname, created_at)
-VALUES ('test1@example.com', '1234', '기록러1', CURRENT_TIMESTAMP);
+INSERT INTO users (email, password, nickname, created_at, updated_at)
+VALUES ('test1@example.com', '1234', '기록러1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO users (email, password, nickname, created_at)
-VALUES ('test2@example.com', '5678', '감정러2', CURRENT_TIMESTAMP);
+INSERT INTO users (email, password, nickname, created_at, updated_at)
+VALUES ('test2@example.com', '5678', '감정러2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
 -- 😊 감정 목록 (기본 감정)
