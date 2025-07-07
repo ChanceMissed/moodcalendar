@@ -21,8 +21,8 @@ public class EmotionService {
     }
 
 
-    public Long addEmotion(EmotionRequestDto emotionRequestDto) {
-        log.info("감정 등록 요청: name={}", emotionRequestDto.getName());
+    public EmotionResponseDto addEmotion(EmotionRequestDto emotionRequestDto) {
+        log.info("감정 등록 요청: {}", emotionRequestDto);
 
         // 중복된 감정 이름 확인
         validateDuplicateName(emotionRequestDto.getName());
@@ -30,9 +30,11 @@ public class EmotionService {
         Emotion emotion = emotionRequestDto.toEntity();
         emotionMapper.insertEmotion(emotion);
 
-        log.info("감정 등록 성고: id={}, name={}", emotion.getId(), emotion.getName());
+        log.info("감정 등록 성공: id={}, name={}", emotion.getId(), emotion.getName());
 
-        return emotion.getId();
+        // 일부러 등록 후 재조회 해서 실제 DB insert 결과를 확인.
+        emotion = emotionMapper.selectEmotionById(emotion.getId());
+        return EmotionResponseDto.from(emotion);
     }
 
    
@@ -58,7 +60,7 @@ public class EmotionService {
      * 모든 감정 조회
      * @return
      */
-    public List<EmotionResponseDto> getAllEmotion(){
+    public List<EmotionResponseDto> getAllEmotions(){
         log.info("모든 감정 조회");
         return emotionMapper.selectAllEmotion()
             .stream()
@@ -72,6 +74,7 @@ public class EmotionService {
      * @return
      */
     public EmotionResponseDto findEmotionById(Long id) {
+        log.info("감정 목록 조회 요청 : id={}", id);
         Emotion emotion = validateExistsEmotion(id);
 
         log.info("감정 조회 성공 : name={}", emotion.getName());
@@ -80,16 +83,14 @@ public class EmotionService {
     }
 
     public void deleteEmotionById(Long id) {
-        log.info("감정 삭제 요청 id={}", id);
+        log.info("감정 삭제 요청: id={}", id);
 
         // 감정 존재하는지 확인
         Emotion emotion = validateExistsEmotion(id);
 
-        log.info("감정 삭제 성공 : name={}", emotion.getName());
-
         int deleted = emotionMapper.deleteEmotionById(id);
         if (deleted == 0) {
-            log.warn("삭제 실패 : id={}", id);
+            log.warn("감정 삭제 실패 : id={}", id);
             throw new RuntimeException("삭제에 실패했습니다.");
         }
         log.info("감정 삭제 성공 : id={}, name={}", id, emotion.getName());

@@ -9,7 +9,7 @@ CREATE TABLE users (
 
 CREATE TABLE emotion (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  user_id BIGINT,
+  user_id BIGINT NULL,
   emoji VARCHAR(10),
   name VARCHAR(50),
   color VARCHAR(7),

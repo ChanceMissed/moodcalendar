@@ -8,15 +8,15 @@
   <insert id="insertEmotion" parameterType="com.example.moodcalendar.domain.Emotion" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO emotion
     (
-                          userId
+         <if test="name != null"> user_id,</if>
+                           emoji
                           ,name
-                          ,emoji
                           ,color
                           ,created_at
     ) VALUES
     (
-                          #{userId}
-                          ,#{emoji}
+          <if test="name != null"> #{userId},</if>
+                          #{emoji}
                           ,#{name}
                           ,#{color}
                           ,NOW()
@@ -44,7 +44,7 @@
   <select id="selectEmotionByName" resultType="com.example.moodcalendar.domain.Emotion">
     SELECT *
       FROM emotion
-     WHERE id = #{id}
+     WHERE name    = #{name}
   </select>
   <!-- Select by ID -->
   <select id="selectEmotionById" resultType="com.example.moodcalendar.domain.Emotion">

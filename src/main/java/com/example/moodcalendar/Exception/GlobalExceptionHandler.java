@@ -4,6 +4,7 @@ import com.example.moodcalendar.dto.common.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -48,6 +49,16 @@ public class GlobalExceptionHandler {
             .body(ApiResponse.error(e.getMessage(), HttpStatus.BAD_REQUEST));
     }
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Void>> handleValidationError(MethodArgumentNotValidException e) {
+        // 첫번째 유효성 검증 실패 메세지
+        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ApiResponse.error(message, HttpStatus.BAD_REQUEST));
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception e) {
         log.error("Unexpected error: ", e); // Log
