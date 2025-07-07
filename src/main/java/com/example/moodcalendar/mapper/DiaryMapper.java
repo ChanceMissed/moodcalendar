@@ -7,11 +7,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface DiaryMapper {
-    // 1. 일기 단건 조회
+    // 1. 일기 단건 조회 - 내부 DB 단순 일기만 확인
     Diary selectDiaryById(Long id);
 
     // 2. 유저별 일기 목록 조회 (페이징, 공개여부 조건 포함 가능)
-    List<Diary> selectDiariesByUserId(Long userId);
+    List<DiaryResponseDto> selectDiariesByUserId(Long userId);
 
     // 3. 일기 등록
     int insertDiary(Diary diary);

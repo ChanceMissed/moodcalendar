@@ -10,16 +10,47 @@
      WHERE id = #{id}
   </select>
 
-  <select id="selectDiariesByUserId" parameterType="long" resultType="com.example.moodcalendar.domain.Diary">
-    SELECT    *
-      FROM    diary
-     WHERE    user_id = #{userId}
-     ORDER BY diary_date DESC
+  <select id="selectDiariesByUserId" parameterType="long"
+    resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
+    SELECT    d.id
+              ,d.user_id
+              ,d.emotion_id
+              ,e.name AS emotion_name
+              ,e.emoji AS emoji
+              ,d.content
+              ,d.diary_date
+              ,d.is_public
+              ,d.created_at
+               ,d.updated_at
+    FROM      diary d
+    LEFT JOIN emotion e
+           ON d.emotion_id = e.id
+    WHERE d.user_id = #{userId}
   </select>
 
   <insert id="insertDiary" parameterType="com.example.moodcalendar.domain.Diary" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO diary (user_id, emotion_id, content, diary_date, is_public, created_at, updated_at)
-    VALUES (#{userId}, #{emotionId}, #{content}, #{diaryDate}, #{isPublic}, NOW(), NOW())
+    INSERT INTO diary (
+                  user_id
+    <if test="emotionId != null">
+                ,emotion_id
+    </if>
+                ,content
+                ,diary_date
+                ,is_public
+                ,created_at
+                ,updated_at
+    )
+    VALUES (
+                #{userId}
+    <if test="emotionId != null">
+              ,#{emotionId}
+    </if>
+              ,#{content}
+              ,#{diaryDate}
+              ,#{isPublic}
+              ,NOW()
+              ,NOW()
+    )
   </insert>
 
   <update id="updateDiary" parameterType="com.example.moodcalendar.domain.Diary">
@@ -39,18 +70,20 @@
      WHERE id = #{id}
   </delete>
 
-  <select id="selectDiaryWithEmotion" parameterType="long" resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
-    SELECT d.id
-          ,d.user_id
-          ,d.emotion_id
-          ,e.name AS emotion_name
-          ,e.emoji AS emoji
-          ,d.content
-          ,d.diary_date
-          ,d.is_public
-          ,d.created_at
-          ,d.updated_at
-      FROM diary d JOIN emotion e ON d.emotion_id = e.id
+  <select id="selectDiaryWithEmotion" parameterType="long"
+    resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
+    SELECT       d.id
+                ,d.user_id
+                ,d.emotion_id
+                ,e.name AS emotion_name
+                ,e.emoji AS emoji
+                ,d.content
+                ,d.diary_date
+                ,d.is_public
+                ,d.created_at
+                ,d.updated_at
+      FROM      diary d
+      LEFT JOIN emotion e ON d.emotion_id = e.id
     WHERE d.id = #{id}
   </select>
 
