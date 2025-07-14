@@ -1,9 +1,11 @@
-package com.example.moodcalendar.controller;
+package com.example.moodcalendar.controller.api;
 
 import com.example.moodcalendar.dto.common.ApiResponse;
 import com.example.moodcalendar.dto.request.UserRequestDto;
 import com.example.moodcalendar.dto.response.UserResponseDto;
 import com.example.moodcalendar.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "User API", description="유저 관련 API")
 @Slf4j
 @Service
 @RequestMapping("/api/users")
@@ -33,6 +36,12 @@ public class UserController {
      * @param userRequestDto
      * @return
      */
+    @Operation(
+        summary = "유저 등록 API",
+        description = "유저를 등록하는 API 입니다. "
+            + "유저를 등록하고 바로 조회해서 응답합니다."
+            + "유저 등록시 이메일과 닉네임은 필수"
+    )
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> register(@RequestBody UserRequestDto userRequestDto) {
         log.info("유저 등록 요청 : userRequestDto={}", userRequestDto);

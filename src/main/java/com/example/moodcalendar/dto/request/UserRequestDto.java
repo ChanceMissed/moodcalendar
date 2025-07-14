@@ -1,6 +1,7 @@
 package com.example.moodcalendar.dto.request;
 
 import com.example.moodcalendar.domain.User;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,10 +18,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDto {
+
+    @NotBlank(message = "이메일은 필수 입력값 입니다.")
     private String email;
 
+    @NotBlank(message = "비밀번호는 필수 입력값 입니다.")
     private String password;
 
+    @NotBlank(message = "닉네임은 필수 입력값 입니다.")
     private String nickname;
 
 

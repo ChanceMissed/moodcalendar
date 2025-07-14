@@ -5,9 +5,11 @@ import com.example.moodcalendar.Exception.NotFoundException;
 import com.example.moodcalendar.domain.Diary;
 import com.example.moodcalendar.domain.Emotion;
 import com.example.moodcalendar.dto.request.DiaryRequestDto;
+import com.example.moodcalendar.dto.request.DiarySearchRequest;
 import com.example.moodcalendar.dto.response.DiaryResponseDto;
 import com.example.moodcalendar.mapper.DiaryMapper;
 import com.example.moodcalendar.mapper.EmotionMapper;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,12 @@ public class DiaryService {
 
     private final EmotionMapper emotionMapper;
 
-    public DiaryService(DiaryMapper diaryMapper,EmotionMapper emotionMapper) {
+    public DiaryService(DiaryMapper diaryMapper, EmotionMapper emotionMapper) {
         this.diaryMapper = diaryMapper;
         this.emotionMapper = emotionMapper;
     }
 
-    public DiaryResponseDto insertDiary(DiaryRequestDto diaryRequestDto){
+    public DiaryResponseDto insertDiary(DiaryRequestDto diaryRequestDto) {
         log.info("일기 등록 요청 : {}", diaryRequestDto);
 
         // 일기 등록
@@ -37,14 +39,15 @@ public class DiaryService {
 
         if (emotionId != null) {
             Emotion emotion = validateExistsEmotion(emotionId);
-            log.info("일기 등록 성공 (감정 포함): id={}, userId={}, emotionId={}",
-                diary.getId(), diary.getUserId(), emotionId);
+            log.info("일기 등록 성공 (감정 포함): id={}, userId={}, content={}, date={}, emotionId={}, isPublic={}",
+                    diary.getId(), diary.getUserId(), diary.getContent(), diary.getDiaryDate(), diary.getEmotionId(),
+                    diary.getIsPublic());
             return DiaryResponseDto.from(diary, emotion.getName(), emotion.getEmoji());
         }
 
-        log.info("일기 등록 성공 (감정 없음): id={}, userId={}"
-            , diary.getId(), diary.getUserId());
-        return DiaryResponseDto.from(diary, null, null);
+        log.info("일기 등록 성공 (감정 없음): id={}, userId={}, content={}, date={}, isPublic={}",
+                diary.getId(), diary.getUserId(), diary.getContent(), diary.getDiaryDate(), diary.getIsPublic());
+        return DiaryResponseDto.from(diary, "감정 정보 없음", "");
     }
 
     public void updateDiary(Long id, DiaryRequestDto diaryRequestDto) {
@@ -73,7 +76,7 @@ public class DiaryService {
     }
 
     // 유저별 일기 목록 조회
-    public List<DiaryResponseDto> getDiariesByUserId(Long userId){
+    public List<DiaryResponseDto> getDiariesByUserId(Long userId) {
         log.info("유저별 일기 목록 조회 요청: userId={}", userId);
         if (userId == null) {
             throw new BadRequestException("유저 ID는 필수입니다.");
@@ -100,6 +103,21 @@ public class DiaryService {
             throw new RuntimeException("삭제에 실패했습니다.");
         }
         log.info("일기 삭제 완료 : id={}", id);
+    }
+
+    public List<DiaryResponseDto> searchDiaries(Long userId, Long emotionId, LocalDate fromDate, LocalDate toDate, String keyword) {
+        log.info("일기 검색 요청: userId={}, emotionId={}, fromDate={}, toDate={}, keyword={}",
+                userId, emotionId, fromDate, toDate, keyword);
+
+        DiarySearchRequest searchRequest = new DiarySearchRequest(userId, emotionId, fromDate, toDate, keyword);
+        List<DiaryResponseDto> diaries = diaryMapper.searchDiaries(searchRequest);
+
+        if (diaries.isEmpty()) {
+            log.info("검색 결과가 없습니다.");
+        } else {
+            log.info("검색 결과 조회 완료: {}건", diaries.size());
+        }
+        return diaries;
     }
 
     private Emotion validateExistsEmotion(Long id) {

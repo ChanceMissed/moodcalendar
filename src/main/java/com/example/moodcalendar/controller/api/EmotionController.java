@@ -1,9 +1,10 @@
-package com.example.moodcalendar.controller;
+package com.example.moodcalendar.controller.api;
 
 import com.example.moodcalendar.dto.common.ApiResponse;
 import com.example.moodcalendar.dto.request.EmotionRequestDto;
 import com.example.moodcalendar.dto.response.EmotionResponseDto;
 import com.example.moodcalendar.service.EmotionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Emotion API", description="감정 관련 API")
 @Slf4j
 @RequestMapping("/api/emotions")
 @RestController

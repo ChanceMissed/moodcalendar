@@ -87,4 +87,44 @@
     WHERE d.id = #{id}
   </select>
 
+  <select id="searchDiaries"
+    parameterType="com.example.moodcalendar.dto.request.DiarySearchRequest"
+    resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
+      SELECT     d.id
+                ,d.user_id
+                ,d.emotion_id
+                ,e.name AS emotion_name
+                ,e.emoji AS emoji
+                ,d.content
+                ,d.diary_date
+                ,d.is_public
+                ,d.created_at
+                ,d.updated_at
+      FROM       diary d
+      LEFT JOIN emotion e
+             ON d.emotion_id = e.id
+    <where>
+      <choose>
+        <when test="userId != null">
+          d.user_id = #{userId}
+        </when>
+        <otherwise>
+          d.is_public = true
+        </otherwise>
+      </choose>
+
+      <if test="emotionId != null">
+        AND d.emotion_id = #{emotionId}
+      </if>
+      <if test="fromDate != null">
+        AND d.diary_date &gt;= #{fromDate}
+      </if>
+      <if test="toDate != null">
+        AND d.diary_date &lt;= #{toDate}
+      </if>
+      <if test="keyword != null and keyword != ''">
+        AND d.content LIKE CONCAT('%', #{keyword}, '%')
+      </if>
+    </where>
+  </select>
 </mapper>

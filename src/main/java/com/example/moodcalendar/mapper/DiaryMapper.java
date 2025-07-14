@@ -1,6 +1,7 @@
 package com.example.moodcalendar.mapper;
 
 import com.example.moodcalendar.domain.Diary;
+import com.example.moodcalendar.dto.request.DiarySearchRequest;
 import com.example.moodcalendar.dto.response.DiaryResponseDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,4 +26,6 @@ public interface DiaryMapper {
     //6. 조인 응답
     DiaryResponseDto selectDiaryWithEmotion(Long id);
 
+    // 7. 검색 조건 조회 (UserId, 날짜 범위, 키워드(제목 내용))
+    List<DiaryResponseDto> searchDiaries(DiarySearchRequest diarySearchRequest);
 }
