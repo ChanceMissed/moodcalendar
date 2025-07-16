@@ -126,16 +126,16 @@
         </otherwise>
       </choose>
 
-      <if test="emotionId != null and emotionId != ''">
+      <if test="emotionId != null">
         AND d.emotion_id = #{emotionId}
       </if>
       <if test="title != null and title != ''">
         AND d.title LIKE CONCAT('%', #{title}, '%')
       </if>
-      <if test="fromDate != null and fromDate != ''">
+      <if test="fromDate != null">
         AND d.diary_date &gt;= #{fromDate}
       </if>
-      <if test="toDate != null and toDate != ''">
+      <if test="toDate != null">
         AND d.diary_date &lt;= #{toDate}
       </if>
       <if test="keyword != null and keyword != ''">

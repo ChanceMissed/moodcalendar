@@ -1,5 +1,6 @@
 package com.example.moodcalendar.service;
 
+import com.example.moodcalendar.Exception.BadRequestException;
 import com.example.moodcalendar.Exception.DuplicateException;
 import com.example.moodcalendar.Exception.NotFoundException;
 import com.example.moodcalendar.domain.User;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserMapper userMapper;
-
 
     public UserService(UserMapper userMapper) {
         this.userMapper = userMapper;
@@ -89,5 +89,31 @@ public class UserService {
         userMapper.deleteUserById(id);
         log.info("유저 삭제 완료 : id={}", id);
 
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDto login(String email,String password) {
+        log.info("로그인 시도: email={}", email);
+
+        User user = userMapper.selectUserByEmail(email);
+
+        // 로그인 이메일 검증
+        if(user == null){
+            log.warn("이메일이 존재 하지 않음: {}", email);
+            throw new NotFoundException("로그인시 존재하지 않는 이메일 입니다.");
+        }
+
+        // 로그인 비밀번호 검증 (나중에 BCrypt 적용 )
+        if(!user.getPassword().equals(password)){
+            log.warn("비밀번호 불일치: email: {}", email);
+            throw new BadRequestException("비밀번호가 일치하지 않습니다");
+        }
+
+        log.info("로그인 시도 성공: id={}, email={}, nickName={}"
+            , user.getId(), user.getEmail(), user.getNickname());
+
+
+        UserResponseDto userResponseDto = UserResponseDto.from(user);
+        return userResponseDto;
     }
 }
