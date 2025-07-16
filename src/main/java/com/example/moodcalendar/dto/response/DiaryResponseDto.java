@@ -17,7 +17,7 @@ import lombok.Setter;
 public class DiaryResponseDto {
     private Long id;
     private Long userId;
-    //private String userNickname; // userTable - Join
+    private String userNickname; // userTable - Join
 
     private String title;
 
@@ -40,10 +40,11 @@ public class DiaryResponseDto {
      * @param emoji
      * @return
      */
-    public static DiaryResponseDto from(Diary diary, String emotionName, String emoji) {
+    public static DiaryResponseDto from(Diary diary, String userNickname, String emotionName, String emoji) {
         return DiaryResponseDto.builder()
             .id(diary.getId())
             .userId(diary.getUserId())
+            .userNickname(userNickname)
             .title(diary.getTitle())
             .emotionId(diary.getEmotionId())
             .emotionName(emotionName)

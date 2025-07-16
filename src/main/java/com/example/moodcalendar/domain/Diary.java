@@ -19,9 +19,9 @@ public class Diary {
 
     private Long userId;
 
-    private String title;
-
     private Long emotionId;
+
+    private String title;
 
     private String content; // 본문 
 

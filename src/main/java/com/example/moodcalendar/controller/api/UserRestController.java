@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "User API", description="유저 관련 API")
 @Slf4j
-@Service
 @RequestMapping("/api/users")
 @RestController
-public class UserController {
+public class UserRestController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
     }
 

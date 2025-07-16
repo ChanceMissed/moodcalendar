@@ -16,9 +16,9 @@ public class DiarySearchRequest {
     
     private Long userId;
 
-    private String title;
-
     private Long emotionId;
+
+    private String title;
     
     private LocalDate fromDate;
     

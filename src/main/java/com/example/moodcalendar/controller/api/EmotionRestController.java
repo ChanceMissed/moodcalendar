@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/emotions")
 @RestController
-public class EmotionController {
+public class EmotionRestController {
 
     private final EmotionService emotionService;
 
 
-    public EmotionController(EmotionService emotionService) {
+    public EmotionRestController(EmotionService emotionService) {
         this.emotionService = emotionService;
     }
 

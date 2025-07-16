@@ -21,6 +21,7 @@ CREATE TABLE diary (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   user_id BIGINT,
   emotion_id BIGINT,
+  title VARCHAR(255),
   content CLOB,
   diary_date DATE,
   is_public BOOLEAN,

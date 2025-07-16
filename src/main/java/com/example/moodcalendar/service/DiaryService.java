@@ -9,6 +9,7 @@ import com.example.moodcalendar.dto.request.DiarySearchRequest;
 import com.example.moodcalendar.dto.response.DiaryResponseDto;
 import com.example.moodcalendar.mapper.DiaryMapper;
 import com.example.moodcalendar.mapper.EmotionMapper;
+import com.example.moodcalendar.mapper.UserMapper;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,13 @@ public class DiaryService {
 
     private final DiaryMapper diaryMapper;
 
+    private final UserMapper userMapper;
+
     private final EmotionMapper emotionMapper;
 
-    public DiaryService(DiaryMapper diaryMapper, EmotionMapper emotionMapper) {
+    public DiaryService(DiaryMapper diaryMapper, UserMapper userMapper,EmotionMapper emotionMapper) {
         this.diaryMapper = diaryMapper;
+        this.userMapper = userMapper;
         this.emotionMapper = emotionMapper;
     }
 
@@ -32,6 +36,7 @@ public class DiaryService {
 
         // 일기 등록
         Diary diary = diaryRequestDto.toEntity();
+        String nickname = userMapper.selectNicknameById(diary.getUserId());
         diaryMapper.insertDiary(diary);
         log.info("일기 등록 완료 : {}", diary);
 
@@ -41,12 +46,12 @@ public class DiaryService {
             Emotion emotion = validateExistsEmotion(emotionId);
             log.info("일기 등록 성공 (감정 포함): id={}, userId={}, title={}, content={}, date={}, emotionId={}, isPublic={}",
                     diary.getId(), diary.getUserId(), diary.getTitle(), diary.getContent(), diary.getDiaryDate(), diary.getEmotionId(),diary.getIsPublic());
-            return DiaryResponseDto.from(diary, emotion.getName(), emotion.getEmoji());
+            return DiaryResponseDto.from(diary, nickname ,emotion.getName(), emotion.getEmoji());
         }
 
         log.info("일기 등록 성공 (감정 없음): id={}, userId={}, title={}, content={}, date={}, isPublic={}",
                 diary.getId(), diary.getUserId(), diary.getTitle() ,diary.getContent(), diary.getDiaryDate(), diary.getIsPublic());
-        return DiaryResponseDto.from(diary, "감정 정보 없음", "");
+        return DiaryResponseDto.from(diary, nickname ,"감정 정보 없음", "");
     }
 
     public void updateDiary(Long id, DiaryRequestDto diaryRequestDto) {
@@ -104,11 +109,11 @@ public class DiaryService {
         log.info("일기 삭제 완료 : id={}", id);
     }
 
-    public List<DiaryResponseDto> searchDiaries(Long userId, String title, Long emotionId, LocalDate fromDate, LocalDate toDate, String keyword) {
+    public List<DiaryResponseDto> searchDiaries(Long userId, Long emotionId, String title, LocalDate fromDate, LocalDate toDate, String keyword) {
         log.info("일기 검색 요청: userId={}, title={}, emotionId={}, fromDate={}, toDate={}, keyword={}",
                 userId, title, emotionId, fromDate, toDate, keyword);
 
-        DiarySearchRequest searchRequest = new DiarySearchRequest(userId, title, emotionId, fromDate, toDate, keyword);
+        DiarySearchRequest searchRequest = new DiarySearchRequest(userId,  emotionId, title, fromDate, toDate, keyword);
         List<DiaryResponseDto> diaries = diaryMapper.searchDiaries(searchRequest);
 
         if (diaries.isEmpty()) {

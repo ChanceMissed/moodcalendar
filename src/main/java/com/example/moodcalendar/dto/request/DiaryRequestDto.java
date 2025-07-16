@@ -20,9 +20,9 @@ public class DiaryRequestDto {
     @NotNull(message = "유저 ID는 필수 입력값 입니다.")
     private Long userId;
 
-    private String title;
-
     private Long emotionId;
+
+    private String title;
 
     private String content;
 

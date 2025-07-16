@@ -14,8 +14,9 @@
     resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
     SELECT    d.id
               ,d.user_id
-              ,d.title
+              ,u.nickname AS user_nickname
               ,d.emotion_id
+              ,d.title
               ,e.name AS emotion_name
               ,e.emoji AS emoji
               ,d.content
@@ -26,16 +27,18 @@
     FROM      diary d
     LEFT JOIN emotion e
            ON d.emotion_id = e.id
+    LEFT JOIN users u
+           ON d.user_id = u.id
     WHERE d.user_id = #{userId}
   </select>
 
   <insert id="insertDiary" parameterType="com.example.moodcalendar.domain.Diary" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO diary (
                   user_id
-                  ,title
     <if test="emotionId != null">
                 ,emotion_id
     </if>
+                ,title
                 ,content
                 ,diary_date
                 ,is_public
@@ -44,10 +47,10 @@
     )
     VALUES (
                 #{userId}
-                #{title}
     <if test="emotionId != null">
               ,#{emotionId}
     </if>
+              ,#{title}
               ,#{content}
               ,#{diaryDate}
               ,#{isPublic}
@@ -59,8 +62,8 @@
   <update id="updateDiary" parameterType="com.example.moodcalendar.domain.Diary">
     UPDATE diary
     <set>
-      <if test="title != null">title = #{title},</if>
       <if test="emotionId != null">emotion_id = #{emotionId},</if>
+      <if test="title != null">title = #{title},</if>
       <if test="content != null">content = #{content},</if>
       <if test="diaryDate != null">diary_date = #{diaryDate},</if>
       <if test="isPublic != null">is_public = #{isPublic},</if>
@@ -78,8 +81,9 @@
     resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
     SELECT       d.id
                 ,d.user_id
-                ,d.title
+                ,u.nickname AS user_nickname
                 ,d.emotion_id
+                ,d.title
                 ,e.name AS emotion_name
                 ,e.emoji AS emoji
                 ,d.content
@@ -89,6 +93,7 @@
                 ,d.updated_at
       FROM      diary d
       LEFT JOIN emotion e ON d.emotion_id = e.id
+      LEFT JOIN users u ON d.user_id = u.id
     WHERE d.id = #{id}
   </select>
 
@@ -97,8 +102,8 @@
     resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
       SELECT     d.id
                 ,d.user_id
-                ,d.title
                 ,d.emotion_id
+                ,d.title
                 ,e.name AS emotion_name
                 ,e.emoji AS emoji
                 ,d.content
@@ -109,6 +114,8 @@
       FROM       diary d
       LEFT JOIN emotion e
              ON d.emotion_id = e.id
+      LEFT JOIN users u
+             ON d.user_id = u.id
     <where>
       <choose>
         <when test="userId != null">
@@ -119,16 +126,16 @@
         </otherwise>
       </choose>
 
-      <if test="emotionId != null">
-        AND d.title = #{title}
-      </if>
-      <if test="emotionId != null">
+      <if test="emotionId != null and emotionId != ''">
         AND d.emotion_id = #{emotionId}
       </if>
-      <if test="fromDate != null">
+      <if test="title != null and title != ''">
+        AND d.title LIKE CONCAT('%', #{title}, '%')
+      </if>
+      <if test="fromDate != null and fromDate != ''">
         AND d.diary_date &gt;= #{fromDate}
       </if>
-      <if test="toDate != null">
+      <if test="toDate != null and toDate != ''">
         AND d.diary_date &lt;= #{toDate}
       </if>
       <if test="keyword != null and keyword != ''">

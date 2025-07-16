@@ -1,6 +1,27 @@
 # 📘 MoodCalendar - 감정 기록 캘린더
 
-description:~~~
+description: 캘린더에 그날 감정을 기록하면서 일기를 
+            쓸거야 (음악(spotify), SNS, 감정좋아요, 공감, 공유 등등)
+---
+## ✅ TODO (FIX List)
+- [x] Diary 조회 시 nickname 반환되도록 Mapper 수정
+- [x] DiaryResponseDto에 nickname 추가
+- [x] DB Diary 테이블에 title 컬럼 추가
+- [x] Diary 등록 시 title 값도 입력되도록 처리
+- [x] Diary 검색 등 등 title 값도 입력되도록 처리
+
+### 📌 참고 사항
+- Emotion 정보는 이미 연동 완료
+- Diary 등록/조회에 title 필드 적용 필요
+
+### 🧪 예상 테스트 시나리오
+- 신규 등록 시 title 필드가 빠졌을 경우 에러 발생해야 함
+- 조회 시 nickname 및 title 제대로 나오는지 확인
+
+### 🕐 예상 작업 시간
+- 2~3시간
+
+---
 
 ## 📌 주요기능
 
