@@ -15,7 +15,9 @@ import lombok.Setter;
 public class DiarySearchRequest {
     
     private Long userId;
-    
+
+    private String title;
+
     private Long emotionId;
     
     private LocalDate fromDate;

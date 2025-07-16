@@ -20,6 +20,8 @@ public class DiaryRequestDto {
     @NotNull(message = "유저 ID는 필수 입력값 입니다.")
     private Long userId;
 
+    private String title;
+
     private Long emotionId;
 
     private String content;
@@ -32,6 +34,7 @@ public class DiaryRequestDto {
         return Diary.builder()
             .userId(this.userId)
             .emotionId(this.emotionId)
+            .title(this.title)
             .content(this.content)
             .diaryDate(this.diaryDate)
             .isPublic(this.isPublic)
@@ -45,6 +48,7 @@ public class DiaryRequestDto {
             .id(id)
             .userId(userId)
             .emotionId(this.emotionId)
+            .title(this.getTitle())
             .content(this.content)
             .diaryDate(this.diaryDate)
             .isPublic(this.isPublic)

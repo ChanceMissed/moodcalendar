@@ -17,6 +17,9 @@ import lombok.Setter;
 public class DiaryResponseDto {
     private Long id;
     private Long userId;
+    //private String userNickname; // userTable - Join
+
+    private String title;
 
     private Long emotionId; // 감정 ID
     private String emotionName; // 감정 이름 (ex. 기쁨, 슬픔 등) // Join
@@ -41,6 +44,7 @@ public class DiaryResponseDto {
         return DiaryResponseDto.builder()
             .id(diary.getId())
             .userId(diary.getUserId())
+            .title(diary.getTitle())
             .emotionId(diary.getEmotionId())
             .emotionName(emotionName)
             .emoji(emoji)

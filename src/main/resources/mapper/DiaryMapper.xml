@@ -14,6 +14,7 @@
     resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
     SELECT    d.id
               ,d.user_id
+              ,d.title
               ,d.emotion_id
               ,e.name AS emotion_name
               ,e.emoji AS emoji
@@ -31,6 +32,7 @@
   <insert id="insertDiary" parameterType="com.example.moodcalendar.domain.Diary" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO diary (
                   user_id
+                  ,title
     <if test="emotionId != null">
                 ,emotion_id
     </if>
@@ -42,6 +44,7 @@
     )
     VALUES (
                 #{userId}
+                #{title}
     <if test="emotionId != null">
               ,#{emotionId}
     </if>
@@ -56,6 +59,7 @@
   <update id="updateDiary" parameterType="com.example.moodcalendar.domain.Diary">
     UPDATE diary
     <set>
+      <if test="title != null">title = #{title},</if>
       <if test="emotionId != null">emotion_id = #{emotionId},</if>
       <if test="content != null">content = #{content},</if>
       <if test="diaryDate != null">diary_date = #{diaryDate},</if>
@@ -74,6 +78,7 @@
     resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
     SELECT       d.id
                 ,d.user_id
+                ,d.title
                 ,d.emotion_id
                 ,e.name AS emotion_name
                 ,e.emoji AS emoji
@@ -92,6 +97,7 @@
     resultType="com.example.moodcalendar.dto.response.DiaryResponseDto">
       SELECT     d.id
                 ,d.user_id
+                ,d.title
                 ,d.emotion_id
                 ,e.name AS emotion_name
                 ,e.emoji AS emoji
@@ -113,6 +119,9 @@
         </otherwise>
       </choose>
 
+      <if test="emotionId != null">
+        AND d.title = #{title}
+      </if>
       <if test="emotionId != null">
         AND d.emotion_id = #{emotionId}
       </if>

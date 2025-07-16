@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/api/diaries")
 @RestController
-public class DiaryController {
+public class DiaryRestController {
 
     private final DiaryService diaryService;
 
-    public DiaryController(DiaryService diaryService) {
+    public DiaryRestController(DiaryService diaryService) {
         this.diaryService = diaryService;
     }
 
@@ -123,6 +123,7 @@ public class DiaryController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<DiaryResponseDto>>> searchDiaries(
         @RequestParam(required = false) Long userId,
+        @RequestParam(required = false) String title,
         @RequestParam(required = false) Long emotionId,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
@@ -130,7 +131,7 @@ public class DiaryController {
 
         log.info("일기 검색 요청: userId={}, emotionId={}, fromDate={}, toDate={}, keyword={}",
             userId, emotionId, fromDate, toDate, keyword);
-        List<DiaryResponseDto> diaryResponseDtoList = diaryService.searchDiaries(userId, emotionId, fromDate, toDate, keyword);
+        List<DiaryResponseDto> diaryResponseDtoList = diaryService.searchDiaries(userId, title, emotionId, fromDate, toDate, keyword);
 
         if (diaryResponseDtoList.isEmpty()) {
             log.info("검색 결과가 없습니다.");

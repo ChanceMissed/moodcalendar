@@ -39,14 +39,13 @@ public class DiaryService {
 
         if (emotionId != null) {
             Emotion emotion = validateExistsEmotion(emotionId);
-            log.info("일기 등록 성공 (감정 포함): id={}, userId={}, content={}, date={}, emotionId={}, isPublic={}",
-                    diary.getId(), diary.getUserId(), diary.getContent(), diary.getDiaryDate(), diary.getEmotionId(),
-                    diary.getIsPublic());
+            log.info("일기 등록 성공 (감정 포함): id={}, userId={}, title={}, content={}, date={}, emotionId={}, isPublic={}",
+                    diary.getId(), diary.getUserId(), diary.getTitle(), diary.getContent(), diary.getDiaryDate(), diary.getEmotionId(),diary.getIsPublic());
             return DiaryResponseDto.from(diary, emotion.getName(), emotion.getEmoji());
         }
 
-        log.info("일기 등록 성공 (감정 없음): id={}, userId={}, content={}, date={}, isPublic={}",
-                diary.getId(), diary.getUserId(), diary.getContent(), diary.getDiaryDate(), diary.getIsPublic());
+        log.info("일기 등록 성공 (감정 없음): id={}, userId={}, title={}, content={}, date={}, isPublic={}",
+                diary.getId(), diary.getUserId(), diary.getTitle() ,diary.getContent(), diary.getDiaryDate(), diary.getIsPublic());
         return DiaryResponseDto.from(diary, "감정 정보 없음", "");
     }
 
@@ -105,11 +104,11 @@ public class DiaryService {
         log.info("일기 삭제 완료 : id={}", id);
     }
 
-    public List<DiaryResponseDto> searchDiaries(Long userId, Long emotionId, LocalDate fromDate, LocalDate toDate, String keyword) {
-        log.info("일기 검색 요청: userId={}, emotionId={}, fromDate={}, toDate={}, keyword={}",
-                userId, emotionId, fromDate, toDate, keyword);
+    public List<DiaryResponseDto> searchDiaries(Long userId, String title, Long emotionId, LocalDate fromDate, LocalDate toDate, String keyword) {
+        log.info("일기 검색 요청: userId={}, title={}, emotionId={}, fromDate={}, toDate={}, keyword={}",
+                userId, title, emotionId, fromDate, toDate, keyword);
 
-        DiarySearchRequest searchRequest = new DiarySearchRequest(userId, emotionId, fromDate, toDate, keyword);
+        DiarySearchRequest searchRequest = new DiarySearchRequest(userId, title, emotionId, fromDate, toDate, keyword);
         List<DiaryResponseDto> diaries = diaryMapper.searchDiaries(searchRequest);
 
         if (diaries.isEmpty()) {
